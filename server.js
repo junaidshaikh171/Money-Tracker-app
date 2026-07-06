@@ -7,7 +7,7 @@ const DATA_FILE = path.join(__dirname, 'data.json');
 
 app.use(express.json());
 
-// Serve static files (CSS, JS, images) - This line is critical
+// Serve static files (CSS, JS, images)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Root route
@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// --- Your existing API code (unchanged) ---
+// Helper functions
 function readEntries() {
   try {
     const raw = fs.readFileSync(DATA_FILE, 'utf-8');
@@ -36,17 +36,35 @@ function computeDerived(entry) {
   return { ...entry, totalExpenses, savings, savingsRate };
 }
 
-// API Routes...
+// API Routes
 app.get('/api/entries', (req, res) => {
   const entries = readEntries().map(computeDerived);
   entries.sort((a, b) => (a.year - b.year) || (a.month - b.month));
   res.json(entries);
 });
 
-app.post('/api/entries', (req, res) => { /* your code */ });
+app.post('/api/entries', (req, res) => {
+  const entries = readEntries();
+  const newEntry = {
+    id: Date.now().toString(),
+    year: Number(req.body.year),
+    month: Number(req.body.month),
+    income: Number(req.body.income) || 0,
+    expenses: req.body.expenses || []
+  };
+  entries.push(newEntry);
+  writeEntries(entries);
+  res.json(computeDerived(newEntry));
+});
 
-app.delete('/api/entries/:id', (req, res) => { /* your code */ });
+app.delete('/api/entries/:id', (req, res) => {
+  let entries = readEntries();
+  entries = entries.filter(e => e.id !== req.params.id);
+  writeEntries(entries);
+  res.json({ success: true });
+});
 
-app.listen(PORT, () => {
-  console.log(`Ledger is running at http://localhost:${PORT}`);
+// ✅ CRITICAL FIX: Bind to 0.0.0.0 instead of localhost
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Ledger is running on port ${PORT}`);
 });
