@@ -63,3 +63,4 @@ money-tracker/
 - Charts are powered by [Chart.js](https://www.chartjs.org/), loaded from a CDN,
   so an internet connection is needed the first time a page loads.
 # Money-Tracker-app
+# Money-Tracker-app

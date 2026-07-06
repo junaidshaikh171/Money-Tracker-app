@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Household Ledger — Money Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="cover-line"></div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">No. 001 &middot; Personal Edition</p>
+    <h1>The Household Ledger</h1>
+    <p class="tagline">A running record of what comes in, what goes out, and what's left over.</p>
+  </div>
+  <div class="stamp" id="latest-stamp">
+    <span class="stamp-label">Latest balance</span>
+    <span class="stamp-value" id="latest-savings">—</span>
+  </div>
+</header>
+
+<main>
+
+  <section class="stub-section">
+    <h2 class="section-title"><span class="section-number">Entry</span> Post a month</h2>
+    <form id="entry-form" class="stub">
+      <div class="stub-row">
+        <label>
+          Month
+          <select id="month" required>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </label>
+        <label>
+          Year
+          <input type="number" id="year" required value="2026" min="2000" max="2100">
+        </label>
+        <label>
+          Income
+          <input type="number" id="income" required min="0" step="0.01" placeholder="0.00">
+        </label>
+      </div>
+
+      <div class="expenses-block">
+        <div class="expenses-head">
+          <span>Expenses</span>
+          <button type="button" id="add-expense" class="ghost-btn">+ Add line</button>
+        </div>
+        <div id="expense-rows"></div>
+      </div>
+
+      <div class="stub-footer">
+        <div class="perforation" aria-hidden="true"></div>
+        <button type="submit" class="primary-btn">File this entry</button>
+      </div>
+    </form>
+    <p class="form-error" id="form-error"></p>
+  </section>
+
+  <section class="summary-section">
+    <div class="summary-card">
+      <span class="summary-label">Total income</span>
+      <span class="summary-value" id="sum-income">₹0</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Total expenses</span>
+      <span class="summary-value" id="sum-expenses">₹0</span>
+    </div>
+    <div class="summary-card highlight">
+      <span class="summary-label">Total saved</span>
+      <span class="summary-value" id="sum-savings">₹0</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Avg. savings rate</span>
+      <span class="summary-value" id="sum-rate">0%</span>
+    </div>
+  </section>
+
+  <section class="ledger-sheet">
+    <h2 class="section-title"><span class="section-number">Sheet</span> Income, expenses &amp; savings over time</h2>
+    <div class="graph-paper">
+      <canvas id="trend-chart"></canvas>
+    </div>
+  </section>
+
+  <section class="breakdown-section">
+    <h2 class="section-title"><span class="section-number">Wheel</span> Where a month's money went</h2>
+    <div class="breakdown-controls">
+      <label for="breakdown-month">Month</label>
+      <select id="breakdown-month"></select>
+    </div>
+    <div class="breakdown-body">
+      <div class="graph-paper small">
+        <canvas id="breakdown-chart"></canvas>
+      </div>
+      <ul class="breakdown-legend" id="breakdown-legend"></ul>
+    </div>
+  </section>
+
+  <section class="register-section">
+    <h2 class="section-title"><span class="section-number">Register</span> Every entry on file</h2>
+    <div class="register-table-wrap">
+      <table class="register-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Income</th>
+            <th>Expenses</th>
+            <th>Saved</th>
+            <th>Rate</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="register-body">
+        </tbody>
+      </table>
+      <p class="empty-note" id="empty-note">No entries yet — file your first month above.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ledger-footer">
+  <p>Kept honestly, balanced monthly.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
